@@ -9,7 +9,7 @@ inevitable. Thus, GraphiX - a scientific visualization tool parallelized in a sh
 graphical utility for GraphiX due to its speed as it is written in C. GraphiX parallelism scheme’s work-balance is nearly perfect, and scales well both in terms of
 memory and amount of cores. 
 
-For more reading please refer to (this)[https://galoren.github.io/files/parco19_Graphix.pdf] paper.
+For more reading please refer to [this](https://galoren.github.io/files/parco19_Graphix.pdf) paper.
 
 ## Prerequisites
 1. Python Version 2
