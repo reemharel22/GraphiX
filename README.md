@@ -33,7 +33,7 @@ Which runs the cython part of GraphiX and the GUI part.
 ## Execution
 To run GraphiX simply change to the Gui directory and run for example the exisiting sedeov-taylor test
 ```
-python main.py -f ../sedov_taylor_xy_plane_test/plot.1
+python graphix.py -f ../sedov_taylor_xy_plane_test/plot.1
 ```
 
 ![pic1](https://user-images.githubusercontent.com/27349725/78580562-3d980d00-783b-11ea-957a-3070b63cdfd4.PNG)
