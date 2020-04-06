@@ -9,7 +9,7 @@ inevitable. Thus, GraphiX - a scientific visualization tool parallelized in a sh
 graphical utility for GraphiX due to its speed as it is written in C. GraphiX parallelism scheme’s work-balance is nearly perfect, and scales well both in terms of
 memory and amount of cores. 
 
-For more reading please refer to [this](https://galoren.github.io/files/parco19_Graphix.pdf) paper.
+For more reading please refer to [this](http://ebooks.iospress.nl/volumearticle/53958) paper.
 
 ## Prerequisites
 1. Python Version 2
@@ -38,3 +38,18 @@ python graphix.py -f ../sedov_taylor_xy_plane_test/plot.1
 
 ![pic1](https://user-images.githubusercontent.com/27349725/78580562-3d980d00-783b-11ea-957a-3070b63cdfd4.PNG)
 
+## Citation
+If you use one of these source codes please cite
+```
+@inproceedings{DBLP:conf/parco/OrenM17,
+  author    = {Re'em Harel and
+               Gal Oren},
+  title     = {GraphiX: A Fast Human-Computer Interaction Symmetric Multiprocessing Parallel Scientific Visualization Tool},
+  series    = {Advances in Parallel Computing},
+  volume    = {36},
+  pages     = {509--520},
+  publisher = {{IOS} Press},
+  year      = {2019},
+  doi       = {10.3233/APC200079},
+}
+```
