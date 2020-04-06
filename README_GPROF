@@ -1,1 +1,0 @@
-When we do load, or start we go to command.c and readline multiple times and we start it from plot.c line 660
