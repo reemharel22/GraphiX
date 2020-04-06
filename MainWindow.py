@@ -517,7 +517,7 @@ class MainWindow(QMainWindow, ui_designergui.Ui_MainWindow):
         self.connect(self.clearPlot, SIGNAL("clicked()"), self.clear_plot_callback)
         self.connect(self.nextPlot, SIGNAL("clicked()"), self.next_plot_callback)
         self.connect(self.previousPlot, SIGNAL("clicked()"), self.previous_plot_callback)
-        self.connect(self.overrideChkBox, SIGNAL("clicked()"), self.override_callback)
+        #self.connect(self.overrideChkBox, SIGNAL("clicked()"), self.override_callback)
         self.connect(self.addPlot, SIGNAL("triggered()"), self.file_load_callback)
         self.connect(self.colorOption, SIGNAL("triggered()"), self.change_color_callback)
         self.connect(self.countCellMasses, SIGNAL("triggered()"), self.count_cell_mass_callback)
@@ -562,16 +562,18 @@ class MainWindow(QMainWindow, ui_designergui.Ui_MainWindow):
     """
     def start_and_kill_thread(self):
         # we kill the thread just to be sure... and ofc close the socket just to be extra sure
-        self.kill_thread()
-        self.start_thread()
+        # self.kill_thread()
+        # self.start_thread()
+        print("RE")
 
     """
         We start the listening thread, he gets the gnuplot_click as his operation
     """
     def start_thread(self):
-        self.thread = threading.Thread(target=self.gnuplot_click)
-        self.should_stop = False
-        self.thread.start()
+        print("RE")
+        # self.thread = threading.Thread(target=self.gnuplot_click)
+        # self.should_stop = False
+        # self.thread.start()
 
     """
         Main function of the listening thread.
@@ -579,24 +581,26 @@ class MainWindow(QMainWindow, ui_designergui.Ui_MainWindow):
         and start the loop to see if he received a message from gnuplot.
     """
     def gnuplot_click(self):
-        ac = ut.AsyncConn(port=self.port)
-        self.control.start_click_gnuplot(ac.port)
-        while not self.should_stop:
-            if ac.msg != "":
-                self.click_on_plot_callback(ac.msg)
-                ac.msg = ""
-            poll()
-            time.sleep(0.01)
-        ac.close()
+        print ("RE")
+        # ac = ut.AsyncConn(port=self.port)
+        # self.control.start_click_gnuplot(ac.port)
+        # while not self.should_stop:
+        #     if ac.msg != "":
+        #         self.click_on_plot_callback(ac.msg)
+        #         ac.msg = ""
+        #     poll()
+        #     time.sleep(0.01)
+        # ac.close()
 
     """
         Each time we want to update the viewer we have to kill the listening thread. 
     """
     def kill_thread(self):
-        self.control.stop_mouse_loop()
-        if self.thread.is_alive():
-            self.should_stop = True
-            time.sleep(0.1)
+        print("RE")
+        # self.control.stop_mouse_loop()
+        # if self.thread.is_alive():
+        #     self.should_stop = True
+        #     time.sleep(0.1)
 
     """
         Updates the physical data table, called from the "listening" thread
@@ -606,78 +610,78 @@ class MainWindow(QMainWindow, ui_designergui.Ui_MainWindow):
     """
     def update_table(self, vertex_values, cell_values):
         digit = '%.3e'
-        i = vertex_values["i_j"]["i"]
-        j = vertex_values["i_j"]["j"]
-        i1 = str(i + 1)
-        j1 = str(j + 1)
-        i = str(i)
-        j = str(j)
-
-        x = digit % vertex_values["i_j"]["x"]
-        y = digit % vertex_values["i_j"]["y"]
-        u = digit % vertex_values["i_j"]["v"]
-        v = digit % vertex_values["i_j"]["u"]
-        self.tableVertex.setItem(0, 0, QTableWidgetItem("({0}, {1})".format(i, j)))
-        self.tableVertex.setItem(0, 1, QTableWidgetItem(str(x)))
-        self.tableVertex.setItem(0, 2, QTableWidgetItem(str(y)))
-        self.tableVertex.setItem(0, 3, QTableWidgetItem(str(u)))
-        self.tableVertex.setItem(0, 4, QTableWidgetItem(str(v)))
-
-        # FOR COUNT CELL MASSES IN A BOUNDING POLYGON
-        if self.list_vertices_flag:
-            self.list_vertices["i"].append(i)
-            self.list_vertices["j"].append(j)
-            self.list_vertices["x"].append(x)
-            self.list_vertices["y"].append(y)
-            leng = len(self.list_vertices["x"])
-            if leng > 1:
-                self.control.plot_line(x, y, self.list_vertices["x"][leng - 2], self.list_vertices["y"][leng - 2])
-
-        # For the (i, j + 1) row:
-        x = digit % vertex_values["i_j1"]["x"]
-        y = digit % vertex_values["i_j1"]["y"]
-        u = digit % vertex_values["i_j1"]["v"]
-        v = digit % vertex_values["i_j1"]["u"]
-        self.tableVertex.setItem(1, 0, QTableWidgetItem("({0}, {1})".format(i, j1)))
-        self.tableVertex.setItem(1, 1, QTableWidgetItem(str(x)))
-        self.tableVertex.setItem(1, 2, QTableWidgetItem(str(y)))
-        self.tableVertex.setItem(1, 3, QTableWidgetItem(str(u)))
-        self.tableVertex.setItem(1, 4, QTableWidgetItem(str(v)))
-
-        # For the (i + 1, j) row:
-        x = digit % vertex_values["i1_j"]["x"]
-        y = digit % vertex_values["i1_j"]["y"]
-        u = digit % vertex_values["i1_j"]["v"]
-        v = digit % vertex_values["i1_j"]["u"]
-        self.tableVertex.setItem(2, 0, QTableWidgetItem("({0}, {1})".format(i1, j)))
-        self.tableVertex.setItem(2, 1, QTableWidgetItem(str(x)))
-        self.tableVertex.setItem(2, 2, QTableWidgetItem(str(y)))
-        self.tableVertex.setItem(2, 3, QTableWidgetItem(str(u)))
-        self.tableVertex.setItem(2, 4, QTableWidgetItem(str(v)))
-
-        # For the (i + 1, j + 1) row:
-        x = digit % vertex_values["i1_j1"]["x"]
-        y = digit % vertex_values["i1_j1"]["y"]
-        u = digit % vertex_values["i1_j1"]["v"]
-        v = digit % vertex_values["i1_j1"]["u"]
-        self.tableVertex.setItem(3, 0, QTableWidgetItem("({0}, {1})".format(i1, j1)))
-        self.tableVertex.setItem(3, 1, QTableWidgetItem(str(x)))
-        self.tableVertex.setItem(3, 2, QTableWidgetItem(str(y)))
-        self.tableVertex.setItem(3, 3, QTableWidgetItem(str(u)))
-        self.tableVertex.setItem(3, 4, QTableWidgetItem(str(v)))
-
-        j = 0
-        cntr_names = self.control.get_contour_names()
-        for i in cntr_names:
-            if j < tablecell_offset:
-                cntr_name = self.tableCell.horizontalHeaderItem(j).text()
-                x = digit % cell_values[str(cntr_name)]["value"]
-                self.tableCell.setItem(0, j, QTableWidgetItem(str(x)))
-            else:
-                cntr_name = self.tableCell_2.horizontalHeaderItem(j - tablecell_offset).text()
-                x = digit % cell_values[str(cntr_name)]["value"]
-                self.tableCell_2.setItem(0, j - tablecell_offset, QTableWidgetItem(str(x)))
-            j = j + 1
+        # i = vertex_values["i_j"]["i"]
+        # j = vertex_values["i_j"]["j"]
+        # i1 = str(i + 1)
+        # j1 = str(j + 1)
+        # i = str(i)
+        # j = str(j)
+        #
+        # x = digit % vertex_values["i_j"]["x"]
+        # y = digit % vertex_values["i_j"]["y"]
+        # u = digit % vertex_values["i_j"]["v"]
+        # v = digit % vertex_values["i_j"]["u"]
+        # self.tableVertex.setItem(0, 0, QTableWidgetItem("({0}, {1})".format(i, j)))
+        # self.tableVertex.setItem(0, 1, QTableWidgetItem(str(x)))
+        # self.tableVertex.setItem(0, 2, QTableWidgetItem(str(y)))
+        # self.tableVertex.setItem(0, 3, QTableWidgetItem(str(u)))
+        # self.tableVertex.setItem(0, 4, QTableWidgetItem(str(v)))
+        #
+        # # FOR COUNT CELL MASSES IN A BOUNDING POLYGON
+        # if self.list_vertices_flag:
+        #     self.list_vertices["i"].append(i)
+        #     self.list_vertices["j"].append(j)
+        #     self.list_vertices["x"].append(x)
+        #     self.list_vertices["y"].append(y)
+        #     leng = len(self.list_vertices["x"])
+        #     if leng > 1:
+        #         self.control.plot_line(x, y, self.list_vertices["x"][leng - 2], self.list_vertices["y"][leng - 2])
+        #
+        # # For the (i, j + 1) row:
+        # x = digit % vertex_values["i_j1"]["x"]
+        # y = digit % vertex_values["i_j1"]["y"]
+        # u = digit % vertex_values["i_j1"]["v"]
+        # v = digit % vertex_values["i_j1"]["u"]
+        # self.tableVertex.setItem(1, 0, QTableWidgetItem("({0}, {1})".format(i, j1)))
+        # self.tableVertex.setItem(1, 1, QTableWidgetItem(str(x)))
+        # self.tableVertex.setItem(1, 2, QTableWidgetItem(str(y)))
+        # self.tableVertex.setItem(1, 3, QTableWidgetItem(str(u)))
+        # self.tableVertex.setItem(1, 4, QTableWidgetItem(str(v)))
+        #
+        # # For the (i + 1, j) row:
+        # x = digit % vertex_values["i1_j"]["x"]
+        # y = digit % vertex_values["i1_j"]["y"]
+        # u = digit % vertex_values["i1_j"]["v"]
+        # v = digit % vertex_values["i1_j"]["u"]
+        # self.tableVertex.setItem(2, 0, QTableWidgetItem("({0}, {1})".format(i1, j)))
+        # self.tableVertex.setItem(2, 1, QTableWidgetItem(str(x)))
+        # self.tableVertex.setItem(2, 2, QTableWidgetItem(str(y)))
+        # self.tableVertex.setItem(2, 3, QTableWidgetItem(str(u)))
+        # self.tableVertex.setItem(2, 4, QTableWidgetItem(str(v)))
+        #
+        # # For the (i + 1, j + 1) row:
+        # x = digit % vertex_values["i1_j1"]["x"]
+        # y = digit % vertex_values["i1_j1"]["y"]
+        # u = digit % vertex_values["i1_j1"]["v"]
+        # v = digit % vertex_values["i1_j1"]["u"]
+        # self.tableVertex.setItem(3, 0, QTableWidgetItem("({0}, {1})".format(i1, j1)))
+        # self.tableVertex.setItem(3, 1, QTableWidgetItem(str(x)))
+        # self.tableVertex.setItem(3, 2, QTableWidgetItem(str(y)))
+        # self.tableVertex.setItem(3, 3, QTableWidgetItem(str(u)))
+        # self.tableVertex.setItem(3, 4, QTableWidgetItem(str(v)))
+        #
+        # j = 0
+        # cntr_names = self.control.get_contour_names()
+        # for i in cntr_names:
+        #     if j < tablecell_offset:
+        #         cntr_name = self.tableCell.horizontalHeaderItem(j).text()
+        #         x = digit % cell_values[str(cntr_name)]["value"]
+        #         self.tableCell.setItem(0, j, QTableWidgetItem(str(x)))
+        #     else:
+        #         cntr_name = self.tableCell_2.horizontalHeaderItem(j - tablecell_offset).text()
+        #         x = digit % cell_values[str(cntr_name)]["value"]
+        #         self.tableCell_2.setItem(0, j - tablecell_offset, QTableWidgetItem(str(x)))
+        #     j = j + 1
 
     def end_program(self):
         self.kill_thread()

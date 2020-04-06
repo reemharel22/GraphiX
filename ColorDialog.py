@@ -24,7 +24,7 @@ class ColorDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         super(ColorDialog, self).__init__(parent)
         self.formLayoutWidget_4 = QtGui.QWidget(self)
-        self.formLayoutWidget_4.setGeometry(QtCore.QRect(510, 0, 231, XXX))
+        self.formLayoutWidget_4.setGeometry(QtCore.QRect(510, 0, 231, 0))
         self.formLayoutWidget_4.setObjectName(_fromUtf8("formLayoutWidget_4"))
         self.formLayout_4 = QtGui.QFormLayout(self.formLayoutWidget_4)
         self.formLayout_4.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)

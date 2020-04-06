@@ -9,7 +9,7 @@ class Gnuplot(object):
 
     def __init__(self, proc=False, winId=0, term=False):
         if proc:
-            self.plot_proc = subprocess.Popen(['gnuplot', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            self.plot_proc = subprocess.Popen(['/home/reemh/dump-output-here/gnuplot_exec/bin/gnuplot', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                               stderr=subprocess.PIPE)
         self.write_mouse = "print MOUSE_X, MOUSE_Y\n"
         self.x_min = 0
@@ -125,6 +125,7 @@ class Gnuplot(object):
         self.should_plot = True
 
     def plot_mesh(self, name):
+        print("MESH")
         self.validate_connection()
         name = self.correct_name(name)
         if not self.with_mirror_x:
@@ -147,11 +148,15 @@ class Gnuplot(object):
             #self.plot_proc.stdin.write(
 #                b"\nplot" + name + " u 2:1:3 w l linecolor variable," + name + " u (2):($1 *-1):3 w l lc variable \n")
                     #b"\nplot" + name + " u 2:1:3 w l linecolor variable," + name + " u ($2 *-1):1:3 w l lc variable \n")
+        self.plot_proc.stdin.write(b"\nplot " + name + " u 2:1:3 w l lc variable \n")
 
     def plot_mesh_2d(self, name):
+        print("MESH")
+        print (name)
         self.validate_connection()
         name = self.correct_name(name)
-        self.plot_proc.stdin.write("p {0} u 2:1:3 w l linecolor variable".format(name))
+        self.plot_proc.stdin.write("p {0} u 2:1:3 w l linecolor variable\n;".format(name))
+        self.plot_proc.stdin.write("p {0} u 2:1:3 w l linecolor variable\n;".format(name))
 
     def plot_mesh_mirror_x(self, name):
         name = self.correct_name(name)
@@ -219,11 +224,12 @@ class Gnuplot(object):
             self.plot_proc.stdin.write(b"set cbtics {0}, {1}, {2}\nshow cbtics\n".format(str(c_min), str(stride), str(c_max)))
 
     def mouse_click(self, port):
-        self.plot_proc.stdin.write(b"while(1) { \n"
-                                   b"pause mouse button1\n"
-                                   b"if(MOUSE_KEY == 1) {\n"
-                                   b"system sprintf(\"echo \'%f,%f\' | nc --send-only localhost " + str(port) + "\", "
-                                                                    "MOUSE_Y, MOUSE_X)\n} }\n")
+        # self.plot_proc.stdin.write(b"while(1) { \n"
+        #                            b"pause mouse button1\n"
+        #                            b"if(MOUSE_KEY == 1) {\n"
+        #                            b"system sprintf(\"echo \'%f,%f\' | nc --send-only localhost " + str(port) + "\", "
+        #                                                             "MOUSE_Y, MOUSE_X)\n} }\n")
+        print ("CLICK")
 
     def change_color(self, mat_id, color):
         color = self.correct_name(color)

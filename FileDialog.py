@@ -24,7 +24,7 @@ class FileDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         super(FileDialog, self).__init__(parent)
         self.formLayoutWidget_3 = QtGui.QWidget(self)
-        self.formLayoutWidget_3.setGeometry(QtCore.QRect(510, 0, 231, XXX))
+        self.formLayoutWidget_3.setGeometry(QtCore.QRect(510, 0, 231, 0))
         self.formLayoutWidget_3.setObjectName(_fromUtf8("formLayoutWidget_3"))
         self.formLayout_3 = QtGui.QFormLayout(self.formLayoutWidget_3)
         self.formLayout_3.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)

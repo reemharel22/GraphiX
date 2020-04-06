@@ -7,7 +7,7 @@ from threading import Thread
 import utils as ut
 import time
 import contours
-import file_handler_leeor as fhl
+import file_handler as fhl
 
 
 class Controller(object):
@@ -29,12 +29,12 @@ class Controller(object):
         self.vof_mirror_x_offset = [3, 0]
         self.vof_mirror_xy_offset = [4, 0]
         self.vof_mirror_y_offset = [5, 0]
-        self.vof_additional_plot = [XX, 0]
+        self.vof_additional_plot = [6, 0]
         self.hm_offset = [7, 0]
         self.hm_mirror_x_offset = [9, 0]
         self.hm_mirror_y_offset = [11, 0]
         self.hm_mirror_xy_offset = [13, 0]
-        self.hm_additional_offset = [XX, 0]
+        self.hm_additional_offset = [15, 0]
         self.additional_file_name = ""
         self.nx = 0
         self.lines_id = [None]
@@ -61,7 +61,7 @@ class Controller(object):
         self.file_name = name
         self.first_time = True
         self.plot_names = []
-        self.fh = fhl.file_handler_leeor()
+#        self.fh = fhl.file_handler()
 
     def set_limits(self, x_min, x_max, y_min, y_max):
         self.proc_interface.set_x_limit(x_min, x_max, True)
