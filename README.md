@@ -19,12 +19,10 @@ For more reading please refer to [this](http://ebooks.iospress.nl/volumearticle/
 
 ## Installement
 If you have GCC version 4.9.1 or 5.1.0 you can use the precompiled gnuplot parallel source code and skip this step
-1.
+1. Run the following command to extract the parallel gnuplot source code, configure it and compiles it
 ```
 sh setup_gnuplot.sh
 ```
-Which extracts the parallel gnuplot source code, configures it and compiles it (assuming you have a correct version of GCC)
-
 2. Setup Cython & Designer
 ```
 sh setup_graphix.sh
