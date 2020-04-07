@@ -42,6 +42,7 @@ python graphix.py ../sedov_taylor_xy_plane_test/plot.1
 As shown above, GraphiX is capable producing heatmaps in high response time thanks to the parallelism scheme.
 In addition, one can disable the heatmap option and generate a contour of the same parameters
 
+![pic3](https://user-images.githubusercontent.com/27349725/78662053-6de1b900-78d8-11ea-92d2-8e6281da9e31.PNG)
 
 ### Next & Previous plot
 You can also skip to the next or previous plot, in which graphix will search for the file with the same prefix but a suffix that is the first larger number than the current one. While maintaining the last command selected
