@@ -36,6 +36,12 @@ python graphix.py ../sedov_taylor_xy_plane_test/plot.1
 ```
 ![pic2](https://user-images.githubusercontent.com/27349725/78646490-c9ed1300-78c1-11ea-9cef-8a3e0a2c88b2.PNG)
 
+## Options
+### Heatmap & Contours
+
+As shown above, GraphiX is capable producing heatmaps in high response time thanks to the parallelism scheme.
+In addition, one can disable the heatmap option and generate a contour of the same parameters
+
 ## Citation
 If you use one of these source codes please cite
 ```
