@@ -58,7 +58,7 @@ If you use one of these source codes please cite
   publisher = {{IOS} Press},
   year      = {2020},
   doi       = {10.3233/APC200079},
-  biburl    = {https://dblp.org/rec/conf/parco/HarelParco19.bib}
+  biburl    = {https://dblp.org/rec/conf/parco/HarelParco19.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 ```
