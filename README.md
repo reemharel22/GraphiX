@@ -6,7 +6,7 @@ the past years, data produced by simulations join the big-data trend. In order t
 maintain a reasonable reaction time of the user’s commands many scientific tools
 tend to introduce parallelism schemes to their software. As the number of cores in
 any given architecture increase, the need for software to utilize the archutecture is
-inevitable. Thus, GraphiX - a scientific visualization tool parallelized in a sharedmemory fashion via OpenMP version 4.5 was created. We chose Gnuplot as the
+inevitable. Thus, GraphiX - a scientific visualization tool parallelized in a shared-memory fashion via OpenMP version 4.5 was created. We chose Gnuplot as the
 graphical utility for GraphiX due to its speed as it is written in C. GraphiX parallelism scheme’s work-balance is nearly perfect, and scales well both in terms of
 memory and amount of cores. 
 
