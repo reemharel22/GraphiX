@@ -44,12 +44,20 @@ If you use one of these source codes please cite
 @inproceedings{DBLP:conf/parco/OrenM17,
   author    = {Re'em Harel and
                Gal Oren},
-  title     = {GraphiX: A Fast Human-Computer Interaction Symmetric Multiprocessing Parallel Scientific Visualization Tool},
+  editor    = {Ian Foster and
+               Gerhard R. Joubert and
+               Luděk Kučera and
+               Wolfgang E. Nagel and
+               Frans Peters},
+  title     = {GraphiX: {A} Fast Human-Computer Interaction Symmetric Multiprocessing Parallel Scientific Visualization Tool},
+  booktitle = {Parallel Computing: Technology Trends, Proceedings of the International
+               Conference on Parallel Computing, Prague, Czech Republic, 10-13 September 2019},
   series    = {Advances in Parallel Computing},
   volume    = {36},
   pages     = {509--520},
   publisher = {{IOS} Press},
-  year      = {2019},
+  year      = {2020},
   doi       = {10.3233/APC200079},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 ```
