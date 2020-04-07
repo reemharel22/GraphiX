@@ -1,4 +1,5 @@
 # GraphiX
+<img align="right" width="96" src="https://user-images.githubusercontent.com/27349725/78643293-b8553c80-78bc-11ea-8cc2-5599c8a2fdf2.png">
 
 Scientific visualization tools are essential for the understanding of physical simulation, as it gives a visualization aspect of the simulated phenomena. In
 the past years, data produced by simulations join the big-data trend. In order to
