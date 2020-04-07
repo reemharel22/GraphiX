@@ -36,8 +36,7 @@ To run GraphiX simply change to the Gui directory and run for example the exisit
 ```
 python graphix.py ../sedov_taylor_xy_plane_test/plot.1
 ```
-
-![pic2](https://user-images.githubusercontent.com/27349725/78580562-3d980d00-783b-11ea-957a-3070b63cdfd4.PNG)
+![pic2](https://user-images.githubusercontent.com/27349725/78646490-c9ed1300-78c1-11ea-9cef-8a3e0a2c88b2.PNG)
 
 ## Citation
 If you use one of these source codes please cite
