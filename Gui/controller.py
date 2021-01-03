@@ -7,7 +7,6 @@ from threading import Thread
 import utils as ut
 import time
 import contours
-import file_handler as fhl
 
 
 class Controller(object):
@@ -61,7 +60,7 @@ class Controller(object):
         self.file_name = name
         self.first_time = True
         self.plot_names = []
-#        self.fh = fhl.file_handler()
+        self.fh = fh.file_handler()
 
     def set_limits(self, x_min, x_max, y_min, y_max):
         self.proc_interface.set_x_limit(x_min, x_max, True)
@@ -116,7 +115,7 @@ class Controller(object):
         self.pre_plot(f_name)
 
         # pre process phase
-        self.file_mesh_name = fh.make_mesh_file(self.file_name, self.override)
+        self.file_mesh_name = self.fh.make_mesh_file(self.file_name, self.override)
         if self.last_command == "":
             self.proc_interface.set_x_limit(self.default_x_min, self.default_x_max)
             self.proc_interface.set_y_limit(self.default_y_min, self.default_y_max)
@@ -140,7 +139,7 @@ class Controller(object):
 
         if self.with_additional_plot:
             self.proc_interface.seperate()
-            file_mesh_name2 = fh.make_mesh_file(self.additional_file_name, self.override)
+            file_mesh_name2 = self.fh.make_mesh_file(self.additional_file_name, self.override)
             self.file_names.append(file_mesh_name2)
             self.proc_interface.plot_mesh_mirror_x(file_mesh_name2)
             self.proc_interface.flush()
@@ -152,16 +151,16 @@ class Controller(object):
         d_cmin, d_cmax = self.get_contour_limits(cntr_type)
         #if not self.plot_names.__contains__(f_name):
         self.pre_plot(f_name)
-        self.file_mesh_name = fh.make_mesh_file(self.file_name, self.override)
+        self.file_mesh_name = self.fh.make_mesh_file(self.file_name, self.override)
         if c_min == d_cmin and d_cmax == c_max:
             c_min, c_max = self.contours.get_contour_limits(cntr_type)
         # if we get a command for contour or heatmap without dealing with the mesh first...
         # process file, just incase we haven't already.
 
-        self.file_contour_name, contour_edge = fh.make_contour_file(self.file_name, self.override)
+        self.file_contour_name, contour_edge = self.fh.make_contour_file(self.file_name, self.override)
 
         #if no user input or bad one of contour min, max we take the ones from the file parsing phase.
-        f = fh.contour_cython_file(self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type),
+        f = self.fh.contour_cython_file(self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type),
                                    str(f_name), str(cntr_type), int(cntr_num), c_min, c_max)
 
         self.proc_interface.set_cbrange(c_min, c_max, type_c=logscale, tics=10)
@@ -177,38 +176,38 @@ class Controller(object):
         self.pre_plot(f_name)
         if c_min == d_cmin and d_cmax == c_max:
             c_min, c_max = self.contours.get_contour_limits(cntr_type)
-        self.file_contour_name, contour_edge = fh.make_contour_file(self.file_name, self.override)
+        self.file_contour_name, contour_edge = self.fh.make_contour_file(self.file_name, self.override)
 
         if self.with_mirror_x:
-            f = fh.heatmap_cython_file(-1 * self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type=cntr_type),
+            f = self.fh.heatmap_cython_file(-1 * self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type=cntr_type),
                                        str(f_name), cntr_type, c_min, c_max, addition_name="x_", offset=self.hm_mirror_x_offset[0])
             # self.post_plot(f, "heatmap")
             self.proc_interface.plot_heatmap(f)
             self.file_names.append(f)
 
         if self.with_mirror_y:
-            f = fh.heatmap_cython_file(self.x_coord, self.y_coord * - 1,
+            f = self.fh.heatmap_cython_file(self.x_coord, self.y_coord * - 1,
                                        self.contours.get_contour_data(cntr_type=cntr_type),
                                        str(f_name), cntr_type, c_min, c_max, addition_name="y_", offset=self.hm_mirror_y_offset[0])
             self.proc_interface.plot_heatmap(f)
             self.file_names.append(f)
 
         if self.with_mirror_x and self.with_mirror_y:
-            f = fh.heatmap_cython_file(-1 * self.x_coord, self.y_coord * - 1,
+            f = self.fh.heatmap_cython_file(-1 * self.x_coord, self.y_coord * - 1,
                                        self.contours.get_contour_data(cntr_type=cntr_type),
                                        str(f_name), cntr_type, c_min, c_max, addition_name="xy_", offset=self.hm_mirror_xy_offset[0])
             self.proc_interface.plot_heatmap(f)
             self.file_names.append(f)
 
-        f = fh.heatmap_cython_file(self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type=cntr_type)
+        f = self.fh.heatmap_cython_file(self.x_coord, self.y_coord, self.contours.get_contour_data(cntr_type=cntr_type)
                                    , str(f_name), cntr_type, c_min, c_max, offset=self.hm_offset[0])
         self.proc_interface.set_cbrange(c_min, c_max, type_c=logscale)
         self.proc_interface.plot_heatmap(f)
         if self.with_additional_plot:
-            file_contour_name, contour_edge = fh.make_contour_file(f_name, self.override)
-            cnt_data = fh.get_specific_contour_data(f_name, cntr_type)
-            x_coord, y_coord = fh.get_x_y_coordinates(f_name)
-            f = fh.heatmap_cython_file(-1 * x_coord, y_coord, cnt_data
+            file_contour_name, contour_edge = self.fh.make_contour_file(f_name, self.override)
+            cnt_data = self.fh.get_specific_contour_data(f_name, cntr_type)
+            x_coord, y_coord = self.fh.get_x_y_coordinates(f_name)
+            f = self.fh.heatmap_cython_file(-1 * x_coord, y_coord, cnt_data
                                        , str(f_name), cntr_type, c_min, c_max, offset=self.hm_additional_offset[0])
             self.proc_interface.plot_heatmap(f)
             self.file_names.append(f)
@@ -222,10 +221,10 @@ class Controller(object):
         d_cmin, d_cmax = self.contours.get_contour_limits(cntr_type)
         if c_min == d_cmin and d_cmax == c_max:
             c_min, c_max = self.contours.get_contour_limits(cntr_type)
-        file_contour_name, contour_edge = fh.make_contour_file(f_name, self.override)
-        cnt_data = fh.get_specific_contour_data(f_name, cntr_type)
-        x_coord, y_coord = fh.get_x_y_coordinates(f_name)
-        f = fh.heatmap_cython_file(-1 * x_coord, y_coord, cnt_data
+        file_contour_name, contour_edge = self.fh.make_contour_file(f_name, self.override)
+        cnt_data = self.fh.get_specific_contour_data(f_name, cntr_type)
+        x_coord, y_coord = self.fh.get_x_y_coordinates(f_name)
+        f = self.fh.heatmap_cython_file(-1 * x_coord, y_coord, cnt_data
                                    , str(f_name), cntr_type, c_min, c_max, offset=self.hm_additional_offset[0])
         self.proc_interface.plot_heatmap(f)
         self.file_names.append(f)
@@ -240,12 +239,12 @@ class Controller(object):
             f_name = self.file_name
 
         if self.with_vof or self.first_time:
-            self.file_vof_name, self.vof_offset[1] = fh.make_vof_file(f_name, 1, 1, offset=self.vof_offset[0])
+            self.file_vof_name, self.vof_offset[1] = self.fh.make_vof_file(f_name, 1, 1, offset=self.vof_offset[0])
             self.proc_interface.plot_vof(self.file_vof_name)
             self.file_names.append(self.file_vof_name)
 
             if self.with_mirror_x:
-                self.file_vof_x_name, self.vof_mirror_x_offset[1] = fh.make_vof_file(f_name, -1, 1, addition_name="mirror_x",
+                self.file_vof_x_name, self.vof_mirror_x_offset[1] = self.fh.make_vof_file(f_name, -1, 1, addition_name="mirror_x",
                                                                                    offset=self.vof_mirror_x_offset[0])
                 self.file_names.append(self.file_vof_x_name)
                 self.proc_interface.plot_vof(self.file_vof_x_name)
@@ -253,7 +252,7 @@ class Controller(object):
                 self.proc_interface.unplot_objects(self.nx * self.ny * self.vof_mirror_x_offset[0] - self.vof_mirror_x_offset[1]
                                                    , self.nx * self.ny * self.vof_mirror_x_offset[0])
             if self.with_mirror_y:
-                self.file_vof_y_name, self.vof_mirror_y_offset[1] = fh.make_vof_file(f_name, 1, -1, addition_name="mirror_y", offset=self.vof_mirror_y_offset[0])
+                self.file_vof_y_name, self.vof_mirror_y_offset[1] = self.fh.make_vof_file(f_name, 1, -1, addition_name="mirror_y", offset=self.vof_mirror_y_offset[0])
                 self.file_names.append(self.file_vof_y_name)
                 self.proc_interface.plot_vof(self.file_vof_y_name)
             else:
@@ -261,14 +260,14 @@ class Controller(object):
                     self.nx * self.ny * self.vof_mirror_y_offset[0] - self.vof_mirror_y_offset[1]
                     , self.nx * self.ny * self.vof_mirror_y_offset[0])
             if self.with_mirror_y and self.with_mirror_x:
-                self.file_vof_xy_name, self.vof_mirror_xy_offset[1] = fh.make_vof_file(f_name, -1, -1,
+                self.file_vof_xy_name, self.vof_mirror_xy_offset[1] = self.fh.make_vof_file(f_name, -1, -1,
                                                                                    addition_name="mirror_xy",
                                                                                    offset=self.vof_mirror_xy_offset[0])
                 self.file_names.append(self.file_vof_xy_name)
                 self.proc_interface.plot_vof(self.file_vof_xy_name)
             if self.with_additional_plot:
                 print self.additional_file_name
-                self.file_vof_additional_name, self.vof_additional_plot[1] = fh.make_vof_file(self.additional_file_name, -1, 1,
+                self.file_vof_additional_name, self.vof_additional_plot[1] = self.fh.make_vof_file(self.additional_file_name, -1, 1,
                                                                                        addition_name="additional_plot",
                                                                                        offset=self.vof_additional_plot[
                                                                                            0])
@@ -286,32 +285,32 @@ class Controller(object):
             self.with_vof = vof
 
         if not self.with_vof or force and not self.first_time:
-            _, self.vof_offset[1] = fh.get_limits_file(self.file_vof_name)
+            _, self.vof_offset[1] = self.fh.get_limits_file(self.file_vof_name)
             self.proc_interface.unplot_objects(self.nx * self.ny * self.vof_offset[0] - self.vof_offset[1],
                                                self.nx * self.ny * self.vof_offset[0])
             if self.with_mirror_x:
-                _, self.vof_mirror_x_offset[1] = fh.get_limits_file(self.file_vof_x_name)
+                _, self.vof_mirror_x_offset[1] = self.fh.get_limits_file(self.file_vof_x_name)
                 self.proc_interface.unplot_objects(
                     self.nx * self.ny * self.vof_mirror_x_offset[0] - self.vof_mirror_x_offset[1]
                     , self.nx * self.ny * self.vof_mirror_x_offset[0])
             if self.with_mirror_y:
-                _, self.vof_mirror_y_offset[1] = fh.get_limits_file(self.file_vof_y_name)
+                _, self.vof_mirror_y_offset[1] = self.fh.get_limits_file(self.file_vof_y_name)
                 self.proc_interface.unplot_objects(
                     self.nx * self.ny * self.vof_mirror_y_offset[0] - self.vof_mirror_y_offset[1]
                     , self.nx * self.ny * self.vof_mirror_y_offset[0])
             if self.with_mirror_y and self.with_mirror_x:
-                _, self.vof_mirror_xy_offset[1] = fh.get_limits_file(self.file_vof_xy_name)
+                _, self.vof_mirror_xy_offset[1] = self.fh.get_limits_file(self.file_vof_xy_name)
                 self.proc_interface.unplot_objects(
                     self.nx * self.ny * self.vof_mirror_xy_offset[0] - self.vof_mirror_xy_offset[1]
                     , self.nx * self.ny * self.vof_mirror_xy_offset[0])
             if self.with_additional_plot:
-                _, self.vof_additional_plot[1] = fh.get_limits_file(self.file_vof_additional_name)
+                _, self.vof_additional_plot[1] = self.fh.get_limits_file(self.file_vof_additional_name)
                 self.proc_interface.unplot_objects(
                     self.nx * self.ny * self.vof_additional_plot[0] - self.vof_additional_plot[1]
                     , self.nx * self.ny * self.vof_additional_plot[0])
 
     def plot_mirror_vof(self, f_name):
-        self.file_vof_x_name, self.vof_mirror_x_offset[1] = fh.make_vof_file(f_name, -1, 1, addition_name="mirror_x",
+        self.file_vof_x_name, self.vof_mirror_x_offset[1] = self.fh.make_vof_file(f_name, -1, 1, addition_name="mirror_x",
                                                                              offset=self.vof_mirror_x_offset[0])
         self.file_names.append(self.file_vof_x_name)
         self.proc_interface.plot_vof(self.file_vof_x_name)
@@ -343,11 +342,11 @@ class Controller(object):
 
     def extract_data(self, new_file):
         self.nx, self.ny, self.x_coord, self.y_coord, self.u_vel, self.v_vel, contour, contour_limit =\
-               fh.get_data_table(self.file_name)
+               self.fh.get_data_table(self.file_name)
         self.contours.update_data(contour, contour_limit)
         self.default_x_min, self.default_x_max, self.default_y_min, self.default_y_max \
-           = fh.get_xy_max_min(self.file_name)
-        self.plot_time = fh.get_time(self.file_name)
+           = self.fh.get_xy_max_min(self.file_name)
+        self.plot_time = self.fh.get_time(self.file_name)
 
     def get_mouse_click_parameters(self, x, y):
         k = ut.position_to_cell(x, y, self.x_coord, self.y_coord, self.nx, self.ny)
@@ -425,7 +424,7 @@ class Controller(object):
             self.default_y_min = -self.default_y_max
         if not flag_x and not flag_y:
             self.default_x_min, self.default_x_max, self.default_y_min, self.default_y_max \
-                = fh.get_xy_max_min(self.file_name)
+                = self.fh.get_xy_max_min(self.file_name)
         self.reset_limits()
 
     def get_time_of_plot(self):
@@ -433,7 +432,7 @@ class Controller(object):
 
     def sum_cell_mass_in_polygon(self, list_vertices, mat_id):
         list_points = ut.find_points_in_polygon(list_vertices, self.x_coord, self.y_coord)
-        print "Cell mass is: ", fh.read_mass_diag(self.nx, self.ny, mat_id, list_points, self.file_name)
+        print "Cell mass is: ", self.fh.read_mass_diag(self.nx, self.ny, mat_id, list_points, self.file_name)
 
     def resize(self, width, height):
         # self.proc_interface.set_terminal(w=width, h=height)
